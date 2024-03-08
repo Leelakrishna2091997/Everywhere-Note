@@ -10,6 +10,11 @@
       "StackName": "amplify-everywherebackend-dev-12230",
       "StackId": "arn:aws:cloudformation:us-east-1:185408264306:stack/amplify-everywherebackend-dev-12230/3f403140-dd14-11ee-beee-0af945c4c935",
       "AmplifyAppId": "d2kdqjk95y4djk"
+    },
+    "categories": {
+      "api": {
+        "everywherebackend": {}
+      }
     }
   }
 }
