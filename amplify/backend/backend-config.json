@@ -7,7 +7,9 @@
           "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
+              "apiKeyExpirationDate": "2025-03-08T18:13:28.103Z",
+              "apiKeyExpirationDays": 365,
+              "description": "Datastore default api key"
             },
             "authenticationType": "API_KEY"
           }

@@ -1,8 +1,15 @@
 import { Amplify } from 'aws-amplify';
 import amplifyconfig from './src/amplifyconfiguration.json';
 Amplify.configure(amplifyconfig);
+import { DataStore } from 'aws-amplify/datastore';
+import { SQLiteAdapter } from '@aws-amplify/datastore-storage-adapter/SQLiteAdapter';
 
+DataStore.configure({
 
+  storageAdapter: SQLiteAdapter
+
+});
+import '@azure/core-asynciterator-polyfill';
 import React, { useEffect, useState } from 'react';
 import {
   StyleSheet,
@@ -36,6 +43,28 @@ export default function App() {
     setFormState({ ...formState, [key]: value });
   }
 
+  async function postDataStore() {
+    try {
+      const post = await DataStore.save(
+        new Post({
+          title: 'My First Post'
+        })
+      );
+      console.log('Post saved successfully!', post);
+    } catch (error) {
+      console.log('Error saving post', error);
+    }
+  }
+
+  async function getDataStore() {
+    try {
+      const posts = await DataStore.query(Post);
+      console.log('Posts retrieved successfully!', JSON.stringify(posts, null, 2));
+    } catch (error) {
+      console.log('Error retrieving posts', error);
+    }
+  }
+  
   async function fetchTodos() {
     try {
       const todoData = await client.graphql({
