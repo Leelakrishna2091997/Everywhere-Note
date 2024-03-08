@@ -15,6 +15,10 @@ type PostMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
 }
 
+type NotesMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type EagerTodo = {
   readonly id: string;
   readonly name: string;
@@ -61,4 +65,26 @@ export declare type Post = LazyLoading extends LazyLoadingDisabled ? EagerPost :
 
 export declare const Post: (new (init: ModelInit<Post, PostMetaData>) => Post) & {
   copyOf(source: Post, mutator: (draft: MutableModel<Post, PostMetaData>) => MutableModel<Post, PostMetaData> | void): Post;
+}
+
+type EagerNotes = {
+  readonly id: string;
+  readonly heading?: string | null;
+  readonly message?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+type LazyNotes = {
+  readonly id: string;
+  readonly heading?: string | null;
+  readonly message?: string | null;
+  readonly createdAt?: string | null;
+  readonly updatedAt?: string | null;
+}
+
+export declare type Notes = LazyLoading extends LazyLoadingDisabled ? EagerNotes : LazyNotes
+
+export declare const Notes: (new (init: ModelInit<Notes, NotesMetaData>) => Notes) & {
+  copyOf(source: Notes, mutator: (draft: MutableModel<Notes, NotesMetaData>) => MutableModel<Notes, NotesMetaData> | void): Notes;
 }

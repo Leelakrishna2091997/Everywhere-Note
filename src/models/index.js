@@ -7,10 +7,11 @@ const PostStatus = {
   "INACTIVE": "INACTIVE"
 };
 
-const { Todo, Post } = initSchema(schema);
+const { Todo, Post, Notes } = initSchema(schema);
 
 export {
   Todo,
   Post,
+  Notes,
   PostStatus
 };

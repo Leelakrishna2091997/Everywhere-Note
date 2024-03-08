@@ -2,13 +2,13 @@ import { Amplify } from 'aws-amplify';
 import amplifyconfig from './src/amplifyconfiguration.json';
 Amplify.configure(amplifyconfig);
 import { DataStore } from 'aws-amplify/datastore';
-import { SQLiteAdapter } from '@aws-amplify/datastore-storage-adapter/SQLiteAdapter';
+// import { SQLiteAdapter } from '@aws-amplify/datastore-storage-adapter/SQLiteAdapter';
 
-DataStore.configure({
+// DataStore.configure({
 
-  storageAdapter: SQLiteAdapter
+//   storageAdapter: SQLiteAdapter
 
-});
+// });
 import '@azure/core-asynciterator-polyfill';
 import React, { useEffect, useState } from 'react';
 import {
@@ -23,48 +23,82 @@ import { generateClient } from 'aws-amplify/api';
 import { createTodo } from './src/graphql/mutations';
 import { listTodos } from './src/graphql/queries';
 import { StatusBar } from 'expo-status-bar';
+import { Notes } from './src/models';
 // App.js
 
 
 
 const initialState = { name: '', description: '' };
+
+const initialNotesState = { heading: '', message: '' };
+
 const client = generateClient();
 // import { View, Text, Button } from 'react-native'
 
 export default function App() {
-  const [formState, setFormState] = useState(initialState);
-  const [todos, setTodos] = useState([]);
+  // const [formState, setFormState] = useState(initialState);
+  const [notesState, setNotesState] = useState(initialNotesState);
+  // const [todos, setTodos] = useState([]);
+  // const [notes, setNotes] = useState([]);
 
   useEffect(() => {
-    fetchTodos();
+    getNotesDataStore();
   }, []);
 
   function setInput(key, value) {
-    setFormState({ ...formState, [key]: value });
-  }
-
-  async function postDataStore() {
-    try {
-      const post = await DataStore.save(
-        new Post({
-          title: 'My First Post'
-        })
-      );
-      console.log('Post saved successfully!', post);
-    } catch (error) {
-      console.log('Error saving post', error);
-    }
-  }
-
-  async function getDataStore() {
-    try {
-      const posts = await DataStore.query(Post);
-      console.log('Posts retrieved successfully!', JSON.stringify(posts, null, 2));
-    } catch (error) {
-      console.log('Error retrieving posts', error);
-    }
+    // console.log("changing values", key, value)
+    setNotesState({...notesState, [key]: value});
+    // console.log("lates", notesState)
   }
   
+  async function updateNotesToDataStore(id) {
+    try {
+      // console.log("updating notes value");
+      const originalNote = await DataStore.query(Notes, id);
+      // console.log("found old note", originalNote);
+        if (originalNote) {
+            // Update the note if it exists
+            await DataStore.save(
+                Notes.copyOf(originalNote, updated => {
+                    updated.heading = notesState.heading;
+                    updated.message = notesState.message;
+                    // Update other fields if necessary
+                })
+            );
+        }
+
+
+    } catch (error) {
+      // console.log('Error saving post', error);
+    }
+  }
+
+  async function postNotesToDataStore() {
+    try {
+      const notesCreated = await DataStore.save(
+        new Notes({
+          heading: notesState.heading,
+          message: notesState.message
+        })
+      );
+      // console.log('Post saved successfully!', notesCreated);
+    } catch (error) {
+      // console.log('Error saving post', error);
+    }
+  }
+
+  async function getNotesDataStore() {
+    try {
+      const notes = await DataStore.query(Notes);
+      // console.log('Notes retrieved successfully!', (notes));
+      // setNotes(notes);
+      setNotesState({...notes[0]});
+      // console.log(notesState, "tat");
+    } catch (error) {
+      // console.log('Error retrieving notes', error);
+    }
+  }
+
   async function fetchTodos() {
     try {
       const todoData = await client.graphql({
@@ -73,7 +107,7 @@ export default function App() {
       const todos = todoData.data.listTodos.items;
       setTodos(todos);
     } catch (err) {
-      console.log('error fetching todos');
+      // console.log('error fetching todos');
     }
   }
 
@@ -90,7 +124,23 @@ export default function App() {
         }
       });
     } catch (err) {
-      console.log('error creating todo:', err);
+      // console.log('error creating todo:', err);
+    }
+  }
+
+  function saveButtonTriggered() {    
+    try {
+      // console.log("saving called", notesState)
+      if (!notesState.heading || !notesState.message) return;
+      
+      if(!notesState.id) {
+        postNotesToDataStore();
+      } else {
+        updateNotesToDataStore(notesState.id);
+      }
+      
+    } catch (err) {
+      console.log('error saving the content:', err);
     }
   }
 
@@ -98,26 +148,20 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <TextInput
-          onChangeText={(value) => setInput('name', value)}
+          onChangeText={(value) => setInput('heading', value)}
           style={styles.input}
-          value={formState.name}
-          placeholder="Name"
+          value={notesState.heading}
+          placeholder="Notes heading..."
         />
         <TextInput
-          onChangeText={(value) => setInput('description', value)}
+          onChangeText={(value) => setInput('message', value)}
           style={styles.input}
-          value={formState.description}
-          placeholder="Description"
+          value={notesState.message}
+          placeholder="Notes content..."
         />
-        <Pressable onPress={addTodo} style={styles.buttonContainer}>
-          <Text style={styles.buttonText}>Create todo</Text>
+        <Pressable onPress={saveButtonTriggered} style={styles.buttonContainer}>
+          <Text style={styles.buttonText}>save</Text>
         </Pressable>
-        {todos.map((todo, index) => (
-          <View key={todo.id ? todo.id : index} style={styles.todo}>
-            <Text style={styles.todoName}>{todo.name}</Text>
-            <Text style={styles.todoDescription}>{todo.description}</Text>
-          </View>
-        ))}
       </View>
     </SafeAreaView>
   );

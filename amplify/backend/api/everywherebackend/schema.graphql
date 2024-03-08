@@ -20,3 +20,10 @@ type Post @model {
   rating: Int
   content: String
 }
+
+type Notes @model {
+  id: ID!
+  heading: String
+  message: String
+}
+
