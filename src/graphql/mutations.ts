@@ -68,3 +68,129 @@ export const deleteTodo = /* GraphQL */ `mutation DeleteTodo(
   APITypes.DeleteTodoMutationVariables,
   APITypes.DeleteTodoMutation
 >;
+export const createPost = /* GraphQL */ `mutation CreatePost(
+  $input: CreatePostInput!
+  $condition: ModelPostConditionInput
+) {
+  createPost(input: $input, condition: $condition) {
+    id
+    title
+    status
+    rating
+    content
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreatePostMutationVariables,
+  APITypes.CreatePostMutation
+>;
+export const updatePost = /* GraphQL */ `mutation UpdatePost(
+  $input: UpdatePostInput!
+  $condition: ModelPostConditionInput
+) {
+  updatePost(input: $input, condition: $condition) {
+    id
+    title
+    status
+    rating
+    content
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdatePostMutationVariables,
+  APITypes.UpdatePostMutation
+>;
+export const deletePost = /* GraphQL */ `mutation DeletePost(
+  $input: DeletePostInput!
+  $condition: ModelPostConditionInput
+) {
+  deletePost(input: $input, condition: $condition) {
+    id
+    title
+    status
+    rating
+    content
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeletePostMutationVariables,
+  APITypes.DeletePostMutation
+>;
+export const createNotes = /* GraphQL */ `mutation CreateNotes(
+  $input: CreateNotesInput!
+  $condition: ModelNotesConditionInput
+) {
+  createNotes(input: $input, condition: $condition) {
+    id
+    heading
+    message
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.CreateNotesMutationVariables,
+  APITypes.CreateNotesMutation
+>;
+export const updateNotes = /* GraphQL */ `mutation UpdateNotes(
+  $input: UpdateNotesInput!
+  $condition: ModelNotesConditionInput
+) {
+  updateNotes(input: $input, condition: $condition) {
+    id
+    heading
+    message
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.UpdateNotesMutationVariables,
+  APITypes.UpdateNotesMutation
+>;
+export const deleteNotes = /* GraphQL */ `mutation DeleteNotes(
+  $input: DeleteNotesInput!
+  $condition: ModelNotesConditionInput
+) {
+  deleteNotes(input: $input, condition: $condition) {
+    id
+    heading
+    message
+    createdAt
+    updatedAt
+    _version
+    _deleted
+    _lastChangedAt
+    __typename
+  }
+}
+` as GeneratedMutation<
+  APITypes.DeleteNotesMutationVariables,
+  APITypes.DeleteNotesMutation
+>;

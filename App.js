@@ -2,12 +2,15 @@ import { Amplify } from 'aws-amplify';
 import amplifyconfig from './src/amplifyconfiguration.json';
 Amplify.configure(amplifyconfig);
 import { DataStore } from 'aws-amplify/datastore';
-// import { SQLiteAdapter } from '@aws-amplify/datastore-storage-adapter/SQLiteAdapter';
-
 // DataStore.configure({
-
-//   storageAdapter: SQLiteAdapter
-
+//   syncExpressions: [syncExpression(Notes, (eachNotes) => eachNotes)]
+// });
+// DataStore.configure({
+//   syncExpressions: [
+//     DataStore.syncExpression(Notes, () => {
+//       return (eachNotes) => eachNotes; // This is a placeholder condition. Define your actual condition here.
+//     })
+//   ]
 // });
 import '@azure/core-asynciterator-polyfill';
 import React, { useEffect, useState } from 'react';
@@ -51,6 +54,12 @@ export default function App() {
     // console.log("lates", notesState)
   }
   
+  async function syncData() {
+    await DataStore.start();
+  }
+
+
+
   async function updateNotesToDataStore(id) {
     try {
       // console.log("updating notes value");
@@ -89,8 +98,10 @@ export default function App() {
 
   async function getNotesDataStore() {
     try {
+      await DataStore.clear();
+      syncData().then(() => console.log('DataStore has started syncing'));
       const notes = await DataStore.query(Notes);
-      // console.log('Notes retrieved successfully!', (notes));
+      console.log('Notes retrieved successfully!', (notes));
       // setNotes(notes);
       setNotesState({...notes[0]});
       // console.log(notesState, "tat");
