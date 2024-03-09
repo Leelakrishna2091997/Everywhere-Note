@@ -144,7 +144,8 @@ export default function App() {
         <Pressable onPress={saveButtonTriggered} style={styles.saveButton}>
           <Text style={styles.buttonText}>save</Text>
         </Pressable>
-        <Toast ref={(ref) => Toast.setRef(ref)} />
+        <Toast />
+        {/* <Toast ref={(ref) => Toast.setRef(ref)} /> */}
       </View>
     </SafeAreaView>
   );
@@ -215,6 +216,7 @@ const styles = StyleSheet.create({
   },
   message: {
     height: '15rem',
+    minHeight: '100',
     padding: '1rem',
     width: '100%',
     marginBottom: 20,
